@@ -1,0 +1,5 @@
+JWT authotantication is used 
+for token user is coming from Cloud MongoDB USER table 
+post http://localhost:8080/login body {"username": "senanur", "password": "Senanur1234."}
+
+all request header have to Bearer token on Authorization key 
