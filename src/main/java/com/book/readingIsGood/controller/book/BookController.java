@@ -2,14 +2,14 @@ package com.book.readingIsGood.controller.book;
 
 import com.book.readingIsGood.dto.book.BookDTO;
 import com.book.readingIsGood.service.book.BookService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class BookController {
 
     private BookService service;
