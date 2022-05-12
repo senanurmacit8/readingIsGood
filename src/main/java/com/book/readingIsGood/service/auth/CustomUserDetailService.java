@@ -37,6 +37,7 @@ public class CustomUserDetailService implements UserDetailsService {
             }
         } catch (UsernameNotFoundException ex) {
             log.error("username not found", ex);
+            throw new UsernameNotFoundException("username not found");
         }
 
         return user;

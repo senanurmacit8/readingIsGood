@@ -4,7 +4,7 @@ import com.book.readingIsGood.dto.user.UserDTO;
 import com.book.readingIsGood.mapper.UserMapper;
 import com.book.readingIsGood.repository.UserRepository;
 import com.book.readingIsGood.service.user.UserService;
-import com.mongodb.MongoInternalException;
+import com.mongodb.MongoException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +21,13 @@ public class UserServiceImpl implements UserService {
         this.mapper = mapper;
     }
 
-    public String userRegister(UserDTO userDTO) throws MongoInternalException {
+    public String userRegister(UserDTO userDTO) throws MongoException {
         log.info("userRegister method called. ");
         try {
             repository.save(mapper.mapToUser(userDTO));
-        } catch (MongoInternalException er) {
+        } catch (MongoException er) {
             log.error(er);
-            throw new MongoInternalException("save operation is failed.");
+            throw new MongoException("save operation is failed.");
         }
 
         return "Success";
