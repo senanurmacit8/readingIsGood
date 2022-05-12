@@ -17,9 +17,9 @@ public class OrderLogic {
     private BookService bookService;
 
     public OrderLogic(OrderService orderService,
-                      BookService bookService){
-        this.orderService= orderService;
-        this.bookService= bookService;
+                      BookService bookService) {
+        this.orderService = orderService;
+        this.bookService = bookService;
     }
 
     @Transactional
@@ -29,10 +29,10 @@ public class OrderLogic {
 
         String isSucces = orderService.createNewOrder(orderDTO);
 
-        if("succes".equals(isSucces)){
+        if ("succes".equals(isSucces)) {
             BookDTO bookDTO = bookService.getBookById(orderDTO.getBookId());
-            if (null!= bookDTO){
-                bookService.updateBookStock(orderDTO.getBookId(), bookDTO.getCount()-1);
+            if (null != bookDTO) {
+                bookService.updateBookStock(orderDTO.getBookId(), bookDTO.getCount() - 1);
             }
         }
 

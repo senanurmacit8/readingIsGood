@@ -5,7 +5,7 @@ import com.book.readingIsGood.mapper.BookMapper;
 import com.book.readingIsGood.model.book.Book;
 import com.book.readingIsGood.repository.BookRepository;
 import com.book.readingIsGood.service.book.BookService;
-import com.mongodb.MongoWriteConcernException;
+import com.mongodb.MongoException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -64,9 +64,9 @@ public class BookServiceImpl implements BookService {
             if(null!= bookDTO){
                 bookRepository.save(mapper.mapToBook(bookDTO));
             }
-        }catch(MongoWriteConcernException ex){
+        }catch(MongoException ex){
             log.error(ex);
-            throw new Exception("Book already exists!");
+            throw new MongoException("Book already exists!");
         }
 
         return "success";
@@ -84,9 +84,9 @@ public class BookServiceImpl implements BookService {
                     bookRepository.save(book);
                 }
             }
-        }catch(MongoWriteConcernException ex){
+        }catch(MongoException ex){
             log.error(ex);
-            throw new Exception("Book already exists!");
+            throw new MongoException("Book already exists!");
         }
 
         return "success";

@@ -13,4 +13,6 @@ public interface UserMapper {
 
     UserDTO mapToUserDTO(User user);
 
+    User mapToUser(UserDTO userDTO);
+
 }
