@@ -5,12 +5,14 @@ import com.book.readingIsGood.mapper.CustomerMapper;
 import com.book.readingIsGood.model.customer.Customer;
 import com.book.readingIsGood.repository.CustomerRepository;
 import com.book.readingIsGood.service.customer.CustomerService;
+import com.mongodb.MongoException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,9 +41,19 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDTOList;
     }
 
-    public String createNewCustomer( CustomerDTO customerDTO){
-        log.info("createNewCustomer method called. ");
-        repository.save(mapper.mapToCustomer(customerDTO));
+    public String createNewCustomer(CustomerDTO customerDTO) throws MongoException {
+        log.info("createNewCustomer method called.");
+
+        try{
+            Customer customer = mapper.mapToCustomer(customerDTO);
+
+            if(!Objects.isNull(customerDTO) && Objects.isNull(customer.getId())){
+                repository.save(customer);
+            }
+        }catch (MongoException mongoException){
+            log.error("MongoException occur.",mongoException);
+            throw new MongoException("MongoException occur.");
+        }
 
         return "success";
     }

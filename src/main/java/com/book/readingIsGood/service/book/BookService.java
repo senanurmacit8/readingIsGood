@@ -9,7 +9,6 @@ public interface BookService {
      List<BookDTO> getAllBooks();
      String addNewBook( BookDTO bookDTO) throws Exception ;
      String updateBookStock(String bookId, Integer stockNumber) throws Exception ;
-     public BookDTO getBookById(String bookId);
-
+     BookDTO getBookById(String bookId);
 
      }

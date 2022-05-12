@@ -6,7 +6,7 @@ import com.book.readingIsGood.mapper.OrderMapper;
 import com.book.readingIsGood.model.order.Order;
 import com.book.readingIsGood.repository.OrderRepository;
 import com.book.readingIsGood.service.order.OrderService;
-import com.mongodb.MongoWriteConcernException;
+import com.mongodb.MongoException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -23,76 +23,85 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper mapper;
 
     public OrderServiceImpl(OrderRepository repository,
-                            OrderMapper mapper){
-        this.repository= repository;
-        this.mapper= mapper;
+                            OrderMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
     }
 
-    public String createNewOrder(OrderDTO orderDTO) throws Exception {
+    public String createNewOrder(OrderDTO orderDTO) throws MongoException {
         log.info("createNewOrder method called");
 
-        try{
-            if(null!= orderDTO){
+        try {
+            if (null != orderDTO) {
                 repository.save(mapper.mapToOrder(orderDTO));
             }
-        }catch(MongoWriteConcernException ex){
+        } catch (MongoException ex) {
             log.error(ex);
-            throw new Exception("Error occur!");
+            throw new MongoException("MongoError occur!");
         }
 
         return "success";
     }
 
-    public List<OrderDTO> getAllOrders(){
+    public List<OrderDTO> getAllOrders() {
         log.info("getAllOrders method called");
-        return mapper.mapToOrderDTOList(repository.findAll());
+
+        List<OrderDTO> orderDTOList = null;
+
+        List<Order> orderList = repository.findAll();
+
+        if (!CollectionUtils.isEmpty(orderList)) {
+            orderDTOList = mapper.mapToOrderDTOList(orderList);
+        }
+
+        return orderDTOList;
     }
 
-    public OrderDTO getOrderById(String orderId){
+    public OrderDTO getOrderById(String orderId) {
         log.info("getOrderById method Called.");
         OrderDTO orderDTO = null;
 
         Optional<Order> response = repository.findById(orderId);
 
-        if(null!= response){
+        if (null != response) {
             orderDTO = mapper.mapToOrderDTO(response.get());
-        }else {
+        } else {
             log.info("There is no books");
         }
 
         return orderDTO;
     }
 
-    public List<OrderDTO> listOrdersByOrderDateAndDeliveredDate( LocalDate startDate, LocalDate endDate) {
-    log.info("listOrdersByOrderDateAndDeliveredDate method called.");
-        List<OrderDTO> orderDTOList= null;
+    public List<OrderDTO> listOrdersByOrderDateAndDeliveredDate(LocalDate startDate, LocalDate endDate) {
+        log.info("listOrdersByOrderDateAndDeliveredDate method called.");
+        List<OrderDTO> orderDTOList = null;
 
-        List<Order> responseList = repository.findNamedParameters(startDate,endDate);
-        if(!CollectionUtils.isEmpty(responseList)){
-            orderDTOList= mapper.mapToOrderDTOList(responseList);
+        List<Order> responseList = repository.findNamedParameters(startDate, endDate);
+        if (!CollectionUtils.isEmpty(responseList)) {
+            orderDTOList = mapper.mapToOrderDTOList(responseList);
         }
         return orderDTOList;
     }
 
-    public String updateOrderStatus(OrderDTO orderDTO) throws Exception {
+    public String updateOrderStatus(OrderDTO orderDTO) throws MongoException {
         log.info("updateOrderStatus method called");
-        try{
-            if(null!= orderDTO){
+
+        try {
+            if (null != orderDTO) {
                 String orderId = mapper.mapToOrder(orderDTO).getId();
 
-                boolean isExist = repository.existsById(orderId);
-                if (isExist){
-                    Order order = repository.findById(orderId).get();
+                Order order = repository.findById(orderId).get();
+                if (null != order.getId()) {
                     order.setStatus(StatusEnum.DELIVERED.toString());
                     repository.save(order);
                 }
             }
-        }catch(MongoWriteConcernException ex){
+        } catch (MongoException ex) {
             log.error(ex);
-            throw new Exception("Error occurs.");
+            throw new MongoException("MongoException occurs.");
         }
 
         return "success";
     }
 
-    }
+}
