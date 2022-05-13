@@ -2,7 +2,6 @@ package com.book.readingIsGood.config;
 
 import com.book.readingIsGood.service.auth.CustomUserDetailService;
 import com.book.readingIsGood.util.JwtFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -18,11 +17,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private CustomUserDetailService userDetailsService;
-
-    @Autowired
     private JwtFilter jwtFilter;
+
+    public SpringSecurityConfig(CustomUserDetailService userDetailsService,
+                                JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
