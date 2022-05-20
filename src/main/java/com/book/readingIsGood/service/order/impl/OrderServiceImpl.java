@@ -8,6 +8,8 @@ import com.book.readingIsGood.repository.OrderRepository;
 import com.book.readingIsGood.service.order.OrderService;
 import com.mongodb.MongoException;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -28,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
         this.mapper = mapper;
     }
 
-    public String createNewOrder(OrderDTO orderDTO) throws MongoException {
+    public ResponseEntity createNewOrder(OrderDTO orderDTO) throws MongoException {
         log.info("createNewOrder method called");
 
         try {
@@ -40,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
             throw new MongoException("MongoError occur!");
         }
 
-        return "success";
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     public List<OrderDTO> getAllOrders() {
@@ -76,14 +78,14 @@ public class OrderServiceImpl implements OrderService {
         log.info("listOrdersByOrderDateAndDeliveredDate method called.");
         List<OrderDTO> orderDTOList = null;
 
-        List<Order> responseList = repository.findNamedParameters(startDate, endDate);
+        List<Order> responseList = repository.getAllByOrderDateAndDeliveredDate(startDate, endDate);
         if (!CollectionUtils.isEmpty(responseList)) {
             orderDTOList = mapper.mapToOrderDTOList(responseList);
         }
         return orderDTOList;
     }
 
-    public String updateOrderStatus(OrderDTO orderDTO) throws MongoException {
+    public ResponseEntity updateOrderStatus(OrderDTO orderDTO) throws MongoException {
         log.info("updateOrderStatus method called");
 
         try {
@@ -101,7 +103,22 @@ public class OrderServiceImpl implements OrderService {
             throw new MongoException("MongoException occurs.");
         }
 
-        return "success";
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    public List<OrderDTO> listOrdersByCustomerId(String customerId) {
+        log.info("listOrdersByCustomerId method Called.");
+        List<OrderDTO> orderDTO = null;
+
+        List<Order> responseList = repository.getAllByCustomerId(customerId);
+
+        if (!CollectionUtils.isEmpty(responseList)) {
+            orderDTO = mapper.mapToOrderDTOList(responseList);
+        } else {
+            log.info("There is no customers orders ");
+        }
+
+        return orderDTO;
     }
 
 }

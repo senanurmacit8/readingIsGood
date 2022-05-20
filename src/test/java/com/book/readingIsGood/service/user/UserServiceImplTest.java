@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,9 +33,9 @@ public class UserServiceImplTest {
     @Test
     public void whenUserRegister_thenSuccessResponse() throws MongoException {
         Mockito.when(mapper.mapToUser(Mockito.any())).thenReturn(prepareUser().get(0));
-        String actualResponse = service.userRegister(expectedUserDTOList().get(0));
+        ResponseEntity actualResponse = service.userRegister(expectedUserDTOList().get(0));
 
-        Assert.assertEquals("Success", actualResponse);
+        Assert.assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
     }
 
     @Test(expected = MongoException.class)

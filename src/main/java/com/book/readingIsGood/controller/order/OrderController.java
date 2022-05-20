@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
 
-@RestController
+@RestController("/order")
 public class OrderController {
 
     private OrderService service;

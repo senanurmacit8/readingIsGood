@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,23 +34,12 @@ public class CustomerServiceImplTest {
     private CustomerServiceImpl service;
 
     @Test
-    public void whenGetCustomerOrders_thenSuccessResponse() {
-        Iterable<Customer> customerList = prepareCustomer();
-
-        Mockito.when(repository.findAllById(any())).thenReturn(customerList);
-        String customerId = "id";
-        List<String> actualResponse = service.getCustomerOrders(customerId);
-
-        Assert.assertEquals("orders", actualResponse.get(0));
-    }
-
-    @Test
     public void whenCreateNewCustomer_thenSuccessResponse() {
         List<Customer> customerList = prepareCustomer();
         Mockito.when(mapper.mapToCustomer(any())).thenReturn(customerList.get(0));
 
-        String actualResponse = service.createNewCustomer(expectedCustomerDTOList().get(0));
-        Assert.assertEquals("success", actualResponse);
+        ResponseEntity actualResponse = service.createNewCustomer(expectedCustomerDTOList().get(0));
+        Assert.assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
     }
 
     @Test(expected = MongoException.class)

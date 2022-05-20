@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
@@ -36,15 +37,15 @@ public class BookServiceImplTest {
         List<Book> bookList = prepareBook();
         Mockito.when(repository.findById(anyString())).thenReturn(bookList.stream().findAny());
 
-        String actualResponse = service.updateBookStock("id",2);
+        ResponseEntity actualResponse = service.updateBookStock("id", 2);
 
-        Assert.assertEquals("success", actualResponse);
+        Assert.assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
     }
 
     @Test(expected = MongoException.class)
     public void whenUpdateBookStock_thenThrowsException() throws Exception {
         Mockito.when(repository.existsById(anyString())).thenThrow(new MongoException(" Exception"));
-        service.updateBookStock("id",2);
+        service.updateBookStock("id", 2);
     }
 
     @Test()
@@ -52,9 +53,9 @@ public class BookServiceImplTest {
         Mockito.when(mapper.mapToBook(any())).thenReturn(prepareBook().get(0));
 
         BookDTO bookDTO = expectedBookDTOList().get(0);
-        String actualResponse = service.addNewBook(bookDTO);
+        ResponseEntity actualResponse = service.addNewBook(bookDTO);
 
-        Assert.assertEquals("success", actualResponse);
+        Assert.assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
     }
 
     @Test(expected = MongoException.class)
@@ -69,9 +70,9 @@ public class BookServiceImplTest {
         Mockito.when(mapper.mapToBook(any())).thenReturn(prepareBook().get(0));
 
         BookDTO bookDTO = expectedBookDTOList().get(0);
-        String actualResponse = service.addNewBook(bookDTO);
+        ResponseEntity actualResponse = service.addNewBook(bookDTO);
 
-        Assert.assertEquals("success", actualResponse);
+        Assert.assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
     }
 
     @Test()

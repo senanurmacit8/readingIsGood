@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -39,9 +40,9 @@ public class OrderServiceImplTest {
         Mockito.when(mapper.mapToOrder(any())).thenReturn(prepareOrder().get(0));
         Mockito.when(repository.findById(anyString())).thenReturn(prepareOrder().stream().findAny());
 
-        String actualResponse = service.updateOrderStatus(expectedOrderDTOList().get(0));
+        ResponseEntity actualResponse = service.updateOrderStatus(expectedOrderDTOList().get(0));
 
-        Assert.assertEquals("success", actualResponse);
+        Assert.assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
     }
 
     @Test(expected = MongoException.class)
@@ -54,7 +55,7 @@ public class OrderServiceImplTest {
 
     @Test
     public void whenListOrdersByOrderDateAndDeliveredDate_thenSuccessResponse() {
-        Mockito.when(repository.findNamedParameters(any(), any())).thenReturn(prepareOrder());
+        Mockito.when(repository.getAllByOrderDateAndDeliveredDate(any(), any())).thenReturn(prepareOrder());
         Mockito.when(mapper.mapToOrderDTOList(any())).thenReturn(expectedOrderDTOList());
 
         List<OrderDTO> actualResponse =
@@ -98,9 +99,9 @@ public class OrderServiceImplTest {
     @Test
     public void whenCreateNewOrder_thenSuccessResponse() throws MongoException {
         Mockito.when(mapper.mapToOrder(any())).thenReturn(prepareOrder().get(0));
-        String actualResponse = service.createNewOrder(expectedOrderDTOList().get(0));
+        ResponseEntity actualResponse = service.createNewOrder(expectedOrderDTOList().get(0));
 
-        Assert.assertEquals("success", actualResponse);
+        Assert.assertTrue(actualResponse.getStatusCode().is2xxSuccessful());
     }
 
     @Test(expected = MongoException.class)

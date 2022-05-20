@@ -6,6 +6,8 @@ import com.book.readingIsGood.repository.UserRepository;
 import com.book.readingIsGood.service.user.UserService;
 import com.mongodb.MongoException;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +23,7 @@ public class UserServiceImpl implements UserService {
         this.mapper = mapper;
     }
 
-    public String userRegister(UserDTO userDTO) throws MongoException {
+    public ResponseEntity userRegister(UserDTO userDTO) throws MongoException {
         log.info("userRegister method called. ");
         try {
             repository.save(mapper.mapToUser(userDTO));
@@ -30,6 +32,6 @@ public class UserServiceImpl implements UserService {
             throw new MongoException("save operation is failed.");
         }
 
-        return "Success";
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -1,15 +1,15 @@
 package com.book.readingIsGood.service.customer;
 
 import com.book.readingIsGood.dto.customer.CustomerDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface CustomerService {
 
-     List<CustomerDTO> getAllCustomers();
+    List<CustomerDTO> getAllCustomers();
 
-     String createNewCustomer(CustomerDTO customerDTO);
+    ResponseEntity createNewCustomer(CustomerDTO customerDTO);
 
-     List<String> getCustomerOrders(String customerId);
-
+    CustomerDTO findCustomerByCustomerId(String customerId);
 }

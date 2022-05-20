@@ -7,6 +7,8 @@ import com.book.readingIsGood.repository.BookRepository;
 import com.book.readingIsGood.service.book.BookService;
 import com.mongodb.MongoException;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -57,7 +59,7 @@ public class BookServiceImpl implements BookService {
         return bookDTO;
     }
 
-    public String addNewBook( BookDTO bookDTO) throws Exception {
+    public ResponseEntity addNewBook( BookDTO bookDTO) throws Exception {
         log.info("addNewBook method called");
 
         try{
@@ -69,10 +71,10 @@ public class BookServiceImpl implements BookService {
             throw new MongoException("Book already exists!");
         }
 
-        return "success";
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    public String updateBookStock(String bookId, Integer stockNumber) throws Exception {
+    public ResponseEntity updateBookStock(String bookId, Integer stockNumber) throws Exception {
         log.info("updateBookStock method called");
 
         try{
@@ -89,7 +91,6 @@ public class BookServiceImpl implements BookService {
             throw new MongoException("Book already exists!");
         }
 
-        return "success";
+        return new ResponseEntity(HttpStatus.OK);
     }
-
 }

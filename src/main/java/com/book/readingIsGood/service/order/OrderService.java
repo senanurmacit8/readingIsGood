@@ -1,13 +1,14 @@
 package com.book.readingIsGood.service.order;
 
 import com.book.readingIsGood.dto.order.OrderDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
 
-    String createNewOrder(OrderDTO orderDTO) throws Exception;
+    ResponseEntity createNewOrder(OrderDTO orderDTO) throws Exception;
 
     List<OrderDTO> getAllOrders();
 
@@ -15,6 +16,8 @@ public interface OrderService {
 
     List<OrderDTO> listOrdersByOrderDateAndDeliveredDate(LocalDate startDate, LocalDate endDate);
 
-    String updateOrderStatus(OrderDTO orderDTO) throws Exception;
+    ResponseEntity updateOrderStatus(OrderDTO orderDTO) throws Exception;
+
+    List<OrderDTO> listOrdersByCustomerId(String customerId);
 
 }

@@ -2,6 +2,8 @@ package com.book.readingIsGood.controller.book;
 
 import com.book.readingIsGood.dto.book.BookDTO;
 import com.book.readingIsGood.service.book.BookService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,18 +27,17 @@ public class BookController {
     }
 
     @PostMapping("/addNewBook")
-    public String addNewBook(@RequestParam BookDTO bookDTO) throws Exception {
+    public ResponseEntity addNewBook(@RequestParam BookDTO bookDTO) throws Exception {
       service.addNewBook(bookDTO);
 
-        return "success";
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/updateBookStock")
-    public String updateBookStock(@RequestParam String bookId, @RequestParam Integer stockNumber) throws Exception {
+    public ResponseEntity updateBookStock(@RequestParam String bookId, @RequestParam Integer stockNumber) throws Exception {
        service.updateBookStock(bookId,stockNumber);
 
-        return "success";
+        return new ResponseEntity(HttpStatus.OK);
     }
-
 
 }

@@ -2,6 +2,8 @@ package com.book.readingIsGood.controller.customer;
 
 import com.book.readingIsGood.dto.customer.CustomerDTO;
 import com.book.readingIsGood.service.customer.CustomerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,25 +17,16 @@ public class CustomerController {
         this.service= service;
     }
 
-    @GetMapping("/AllCustomers")
-    public List<CustomerDTO> getAllCustomers(){
+    @GetMapping("/listCustomers")
+    public List<CustomerDTO> listCustomers(){
         List<CustomerDTO> customerDTOList = service.getAllCustomers();
         return customerDTOList;
     }
 
     @PostMapping("/createNewCustomer")
     @ResponseBody
-    public String createNewCustomer(@RequestParam  CustomerDTO customerDTO){
+    public ResponseEntity createNewCustomer(@RequestParam  CustomerDTO customerDTO){
         service.createNewCustomer(customerDTO);
-        return "success";
+        return new ResponseEntity(HttpStatus.OK);
     }
-
-    @GetMapping("/customerOrders")
-    public List<String> getCustomerOrders(@RequestParam String customerId){
-
-     List<String> responseList = service.getCustomerOrders(customerId);
-
-     return responseList;
-    }
-
 }
